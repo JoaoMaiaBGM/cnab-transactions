@@ -54,9 +54,9 @@ class CnabFormView(FormView):
 
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
         form = self.get_form(form_class=UploadFileForm)
-        #files = request.FILES.get('./test_dataframe/CNAB.txt')
+        files = request.FILES.get('form')
 
-        with open('./test_dataframe/CNAB.txt', 'r') as file:
+        with open(files, 'r') as file:
             self.file_normalizer(file)
 
             """ for value in file:
