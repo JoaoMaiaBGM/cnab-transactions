@@ -51,6 +51,7 @@ THIRD_PART_APPS = [
 
 MY_APPS = [
     "accounts",
+    'cnab_api',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PART_APPS + MY_APPS
@@ -95,7 +96,7 @@ DATABASES = {
         'NAME': os.getenv("POSTGRES_DB"),
         'USER': os.getenv("POSTGRES_USER"),
         'PASSWORD': os.getenv("POSTGRES_PASSWORD"),
-        'HOST': 'db',
+        'HOST': '127.0.0.1',
         'PORT': '5432',
     },
     'secondary': {
