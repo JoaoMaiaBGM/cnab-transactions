@@ -1,5 +1,5 @@
 {% extends "style.html" %} {% block content %}
-
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <title>Arquivos CNAB</title>
@@ -10,10 +10,18 @@
       <p>
         Bem vindo(a) a plataforma de consulta de movimentações financeiras
       </p>
-      <form class="input-button">
+      <form class="input-button" id="form" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
         <label for="cnabFile">Selecionar arquivo &#187</label>
+        {{form}}
         <input type="file" id="cnabFile" name="cnabFile" accept=".csv, .txt" />
       </form>
+      <script>
+        document.getElementById('cnabFile').onchange = () => {
+          console.log('get file')
+            document.getElementById('form').submit();
+        };
+      </script>
     </div>
   </body>
 </html>
