@@ -19,17 +19,17 @@ class CnabFormView(FormView):
         files = request.FILES.get('file')
 
         if file.is_valid():
-            print('Arquivo válido')
+            print('Valid file')
             file = files.read()
             self.read_file.read_file(file)
             return self.form_valid(file)
         else:
-            print('Arquivo inválido')
+            print('Invalid file')
             return self.form_invalid(file)
 
     
 class CnabFileTransactions(FormView):
-    store_name = None
+    store = None
     form_class = StoreFilter
     template_name = "transactions.html"
     success_url=('/cnab_file/transactions/')
@@ -37,12 +37,10 @@ class CnabFileTransactions(FormView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['transactions'], context['total_sum'] = self.filter.filter(self.store_name)
-        context['store_names'] = CnabApiModel.objects.all().values('nome_loja').distinct()
+        context['transactions'], context['total_sum'] = self.filter.filter(self.store)
+        context['store'] = CnabApiModel.objects.all().values('nome_loja').distinct()
         return context
 
-    def form_valid(self, form):
-        return super().form_valid(form)
     
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
         context = super().get_context_data(**kwargs)
@@ -50,10 +48,10 @@ class CnabFileTransactions(FormView):
         file = self.get_form(form_class)
 
         if file.is_valid():
-            print('Arquivo válido')
-            self.store_name = file.cleaned_data['store']
-            context['transactions'], context['total_sum'] = self.filter.filter(self.store_name)
+            print('Valid file')
+            self.store = file.cleaned_data['store']
+            context['transactions'], context['total_sum'] = self.filter.filter(self.store)
             return self.render_to_response(context)
         else:
-            print('Arquivo inválido')
+            print('Invalid file')
             return self.form_invalid(file)

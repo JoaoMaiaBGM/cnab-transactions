@@ -17,19 +17,19 @@ class ApiRepository():
 
     def get_transactions(self):
         query = self.model.objects.all().order_by('nome_loja')
-        formatted_query = []
+        normalized_query = []
         for transaction in query:
             transaction = self.normalizer.query_normalizer(transaction)
-            formatted_query = formatted_query + [transaction]
-        return formatted_query
+            normalized_query = normalized_query + [transaction]
+        return normalized_query
 
 
-    def get_transactions_by_store_name(self, store_name):
-        query = self.model.objects.filter(nome_loja=store_name).order_by('nome_loja')
+    def get_transactions_by_store(self, store):
+        query = self.model.objects.filter(nome_loja=store).order_by('nome_loja')
         query_total = query.aggregate(Sum('valor'))
         query_total =  str(round(query_total['valor__sum'], 2))
-        formatted_query = []
+        normalized_query = []
         for transaction in query:
             transaction = self.normalizer.query_normalizer(transaction)
-            formatted_query = formatted_query + [transaction]
-        return formatted_query, query_total
+            normalized_query = normalized_query + [transaction]
+        return normalized_query, query_total

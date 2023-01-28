@@ -1,6 +1,6 @@
 {% extends 'style.html' %} {% block content %}
-<div class="item">
-  <h1>Arquivos CNAB</h1>
+<div>
+  <h1>Listagem das transações</h1>
 </div>
 <div class="transaction">
   <form method="POST" enctype="multipart/form-data" id="file">
@@ -9,14 +9,14 @@
 </div>
 <table>
   <tr>
-    <th>Transação</th>
+    <th>Tipo</th>
     <th>Data</th>
     <th>Valor</th>
     <th>CPF</th>
     <th>Cartão</th>
     <th>Hora</th>
     <th>Dono da loja</th>
-    <th>Nome loja</th>
+    <th>Nome da loja</th>
   </tr>
   {% for transaction in transactions %}
   <tr>
@@ -26,7 +26,7 @@
     <td>{{ transaction.cpf }}</td>
     <td>{{ transaction.cartao }}</td>
     <td>{{ transaction.hora }}</td>
-    <td>{{ transaction.dono_loja }}</td>
+    <td>{{ transaction.dono_da_loja }}</td>
     <td>{{ transaction.nome_loja }}</td>
   </tr>
   {% endfor %}
