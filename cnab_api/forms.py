@@ -9,3 +9,7 @@ class UploadFileForm(forms.Form):
             FileExtensionValidator(allowed_extensions=["txt"])
         ],
     )
+
+
+class StoreFilter(forms.Form):
+    store = forms.CharField(widget = forms.HiddenInput(), required = False)
