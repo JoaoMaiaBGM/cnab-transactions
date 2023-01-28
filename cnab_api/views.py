@@ -1,64 +1,17 @@
-import datetime
-
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import FormView
 
-from .forms import UploadFileForm
+from cnab_api.forms import StoreFilter, UploadFileForm
+from cnab_api.models import CnabApiModel
+from cnab_api.utils import FileUtils
 
 
 class CnabFormView(FormView):
     template_name = 'index.html'
     form_class = UploadFileForm
     success_url=('transactions/')
-    
-    def read_file(self, file):
-        file = file.decode('utf-8')
-        for value in file.splitlines():
-            _ = self.file_normalizer(value)
-        return file
+    read_file = FileUtils()            
 
-
-    def file_normalizer(self, value):
-        if value is not None:
-            return {
-                'tipo': value[0:1],
-                'data': datetime.date(int(value[0:1]), int(value[5:7]), int(value[7:9])),
-                'valor': self.transactions_signal(int(value[0:1]), float(value[9:19]) / 100),
-                'cpf': value[19:30],
-                'cartao': value[30:42],
-                'hora_transacao': datetime.time(int(value[42:44]), int(value[44:46]), int(value[46:48])),
-                'dono_loja': value[48:62],
-                'nome_loja': value[62:81],
-            }
-            
-
-    def transactions_signal(self, type_transactions, value):
-        if type_transactions in [2,3,9]:
-            return value
-        else:
-            return abs(value)
-
-
-    def type_transactions_list(self, type_transaction):
-
-        if type_transaction == 1:
-            return 'Débito'
-        elif type_transaction == 2:
-            return 'Boleto'
-        elif type_transaction == 3:
-            return 'Financiamento'
-        elif type_transaction == 4:
-            return 'Crédito'
-        elif type_transaction == 5:
-            return 'Recebimento Empréstimo'
-        elif type_transaction == 6:
-            return 'Vendas'
-        elif type_transaction == 7:
-            return 'Recebimentos TED'
-        elif type_transaction == 8:
-            return 'Recebimentos DOC'
-        else:
-            return 'Aluguel'
 
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
         form_class = self.get_form_class()
@@ -66,26 +19,39 @@ class CnabFormView(FormView):
         files = request.FILES.get('file')
 
         if file.is_valid():
-            print('Arquivo válido')
+            print('Valid file')
             file = files.read()
-            self.read_file(file)
+            self.read_file.read_file(file)
             return self.form_valid(file)
         else:
-            print('Arquivo inválido')
+            print('Invalid file')
             return self.form_invalid(file)
 
     
 class CnabFileTransactions(FormView):
+    store = None
+    form_class = StoreFilter
     template_name = "transactions.html"
     success_url=('/cnab_file/transactions/')
+    filter = FileUtils()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['transactions'], context['total_sum'] = self.filter.filter(self.store)
+        context['store'] = CnabApiModel.objects.all().values('nome_loja').distinct()
+        return context
+
     
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
+        context = super().get_context_data(**kwargs)
         form_class = self.get_form_class()
         file = self.get_form(form_class)
 
         if file.is_valid():
-            print('Arquivo válido')
-            return self.render_to_response()
+            print('Valid file')
+            self.store = file.cleaned_data['store']
+            context['transactions'], context['total_sum'] = self.filter.filter(self.store)
+            return self.render_to_response(context)
         else:
-            print('Arquivo inválido')
+            print('Invalid file')
             return self.form_invalid(file)

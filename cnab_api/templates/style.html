@@ -2,8 +2,7 @@
 
 <style>
   body {
-    background-color: rgb(54, 133, 103);
-
+    background-color: #368567;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
       sans-serif;
   }
@@ -12,10 +11,8 @@
     height: 300px;
 
     display: flex;
-
     flex-wrap: wrap;
     flex-direction: column;
-
     justify-content: space-around;
     align-items: center;
     align-content: center;
@@ -23,9 +20,11 @@
 
   h1 {
     margin-bottom: 0;
+
+    text-align: center;
     font-size: 45px;
     color: #ffff;
-    text-shadow: 1px 1px #000000;
+    text-shadow: 1px 1px #585858;
   }
 
   p {
@@ -56,5 +55,37 @@
     font-size: 23px;
 
     cursor: pointer;
+  }
+
+  table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+  }
+
+  table {
+    width: auto;
+    margin: 0 auto;
+  }
+
+  td,
+  th {
+    background-color: #368567;
+    border: 1px solid #ffff;
+
+    text-align: left;
+    color: #ffff;
+    text-shadow: 1px 1px #585858;
+
+    padding: 10px;
+  }
+
+  .transaction {
+    flex: 0 0 auto;
+    margin: 10px;
+  }
+
+  select {
+    font-size: 18px;
   }
 </style>
