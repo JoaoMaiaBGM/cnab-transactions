@@ -9,18 +9,24 @@ from .forms import UploadFileForm
 class CnabFormView(FormView):
     template_name = 'index.html'
     form_class = UploadFileForm
-    success_url=('cnab_file/transactions/')
+    success_url=('transactions/')
     
-
-    def file_normalizer(self, file, value):
+    def read_file(self, file):
+        file = file.decode('utf-8')
         for value in file.splitlines():
+            _ = self.file_normalizer(value)
+        return file
+
+
+    def file_normalizer(self, value):
+        if value is not None:
             return {
                 'tipo': value[0:1],
                 'data': datetime.date(int(value[0:1]), int(value[5:7]), int(value[7:9])),
                 'valor': self.transactions_signal(int(value[0:1]), float(value[9:19]) / 100),
                 'cpf': value[19:30],
                 'cartao': value[30:42],
-                'hora_transacao': datetime.time(int(value[42:48]), int(value[44:46]), int(value[46:48])),
+                'hora_transacao': datetime.time(int(value[42:44]), int(value[44:46]), int(value[46:48])),
                 'dono_loja': value[48:62],
                 'nome_loja': value[62:81],
             }
@@ -56,17 +62,17 @@ class CnabFormView(FormView):
 
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
         form_class = self.get_form_class()
-        form = self.get_form(form_class)
-        files = request.FILES.get('form')
+        file = self.get_form(form_class)
+        files = request.FILES.get('file')
 
-        if form.is_valid():
-            print('Formulário válido')
+        if file.is_valid():
+            print('Arquivo válido')
             file = files.read()
-            self.file_normalizer(file)
-            return self.form_valid(form)
+            self.read_file(file)
+            return self.form_valid(file)
         else:
-            print('Formulário inválido')
-            return self.form_invalid(form)
+            print('Arquivo inválido')
+            return self.form_invalid(file)
 
     
 class CnabFileTransactions(FormView):
@@ -75,11 +81,11 @@ class CnabFileTransactions(FormView):
     
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
         form_class = self.get_form_class()
-        form = self.get_form(form_class)
+        file = self.get_form(form_class)
 
-        if form.is_valid():
-            print('Formulário válido')
-            return self.form_valid(form)
+        if file.is_valid():
+            print('Arquivo válido')
+            return self.render_to_response()
         else:
-            print('Formulário inválido')
-            return self.form_invalid(form)
+            print('Arquivo inválido')
+            return self.form_invalid(file)

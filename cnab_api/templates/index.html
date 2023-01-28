@@ -7,19 +7,17 @@
   <body>
     <div class="container-body">
       <h1>Arquivos CNAB</h1>
-      <p>
-        Bem vindo(a) a plataforma de consulta de movimentações financeiras
-      </p>
-      <form class="input-button" id="form" method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-        <label for="cnabFile">Selecionar arquivo &#187</label>
-        {{form}}
-        <input type="file" id="cnabFile" name="cnabFile" accept=".csv, .txt" />
+      <p>Bem vindo(a) a plataforma de consulta de movimentações financeiras</p>
+      <form method="POST" enctype="multipart/form-data" id="file">
+        <div >
+          {% csrf_token %}
+          <label for="id_file">Selecionar arquivo &#187</label>
+          {{ form }}
+        </div>
       </form>
       <script>
-        document.getElementById('cnabFile').onchange = () => {
-          console.log('get file')
-            document.getElementById('form').submit();
+        document.getElementById("id_file").onchange = function () {
+          document.getElementById("file").submit();
         };
       </script>
     </div>

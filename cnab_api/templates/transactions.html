@@ -1,0 +1,17 @@
+{% extends "style.html" %} {% block content %}
+    <div class="container-transactions">
+        <h1>Arquivos CNAB</h1>
+      <form id="form" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+        <h2>Tabela de transações</h2>
+      </form>
+      <script>
+        document.getElementById('cnabFile').onchange = () => {
+            console.log('file obtained')
+        };
+      </script>
+    </div>
+  </body>
+</html>
+
+{% endblock content %}
