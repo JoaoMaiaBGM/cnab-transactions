@@ -16,10 +16,4 @@ class CnabApiSerializer(serializers.ModelSerializer):
             'hora',
             'dono_da_loja',
             'nome_loja',
-            'total_sum',
         ]
-
-    
-    def get_total_sum(self, instance):
-        total_sum = CnabApiModel.objects.all().aggregate(Sum('valor'))
-        return total_sum

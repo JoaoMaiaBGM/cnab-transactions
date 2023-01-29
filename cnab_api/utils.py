@@ -17,7 +17,4 @@ class FileUtils():
 
 
     def filter(self, store):
-            if store:
-                return self.repository.get_transactions_by_store(store)
-            else:
-                return self.repository.get_transactions(), None
+        return self.repository.get_transactions(), None

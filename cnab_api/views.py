@@ -1,7 +1,7 @@
 from django.http import HttpRequest, HttpResponse
 from django.views.generic import FormView
 
-from cnab_api.forms import StoreFilter, UploadFileForm
+from cnab_api.forms import UploadFileForm
 from cnab_api.models import CnabApiModel
 from cnab_api.utils import FileUtils
 
@@ -30,7 +30,7 @@ class CnabFormView(FormView):
     
 class CnabFileTransactions(FormView):
     store = None
-    form_class = StoreFilter
+    form_class = UploadFileForm
     template_name = "transactions.html"
     success_url=('/cnab_file/transactions/')
     filter = FileUtils()
