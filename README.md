@@ -1,6 +1,6 @@
 # cnab-transactions
 
-Para testar a aplicação, fala o clone do repositório para sua máquina e em seguida realize os passos abaixo.
+Para testar a aplicação, faça o clone do repositório para sua máquina e em seguida realize os passos abaixo.
 
 ## Usando docker
 
