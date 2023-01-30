@@ -1,5 +1,7 @@
 # cnab-transactions
 
+Para testar a aplicação, fala o clone do repositório para sua máquina e em seguida realize os passos abaixo.
+
 ## Usando docker
 
 1. No terminal execute o comando:
@@ -14,7 +16,7 @@
    localhost:8000/api/cnab_file/
    ```
 
-   Selecione o arquivo `CNAB` de extensão `.txt` a ser enviado. As transações serão listadas na tela.
+   Faça uma cópia do arquivo `CNAB.txt` que se encontra no diretório test_dataframe. Ele serve para ser enviado no fomrulário da página acessada. As transações serão listadas na tela.
 
    Após listagem, caso queira alternar entre telas, acesse o endereço:
 
