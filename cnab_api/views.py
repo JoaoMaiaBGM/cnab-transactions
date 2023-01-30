@@ -38,7 +38,7 @@ class CnabFileTransactions(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['transactions'], context['total_sum'] = self.filter.filter(self.store)
-        context['store'] = CnabApiModel.objects.all().values('nome_loja').distinct()
+        context['store'] = CnabApiModel.objects.all().values('nome_loja')
         return context
 
     
@@ -49,7 +49,7 @@ class CnabFileTransactions(FormView):
 
         if file.is_valid():
             print('Valid file')
-            self.store = file.cleaned_data['store']
+            self.store = file.pop('store')
             context['transactions'], context['total_sum'] = self.filter.filter(self.store)
             return self.render_to_response(context)
         else:

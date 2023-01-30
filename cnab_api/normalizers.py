@@ -24,7 +24,7 @@ class FileNormalizer():
             return abs(value)
 
 
-    def type_transactions_list(self, type_transaction):
+    def type_transactions(self, type_transaction):
 
         if type_transaction == 1:
             return 'Débito'
@@ -49,7 +49,7 @@ class FileNormalizer():
     def query_normalizer(self, query):
          if query is not None:
             return {
-                'tipo': self.type_transactions_list(query.tipo),
+                'tipo': self.type_transactions(query.tipo),
                 'data': query.data,
                 'valor': query.valor,
                 'cpf': query.cpf,
