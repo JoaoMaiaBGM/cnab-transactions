@@ -1,34 +1,36 @@
 # cnab-transactions
 
-## Iniciando a aplicação
+Para testar a aplicação, faça o clone do repositório para sua máquina e em seguida realize os passos abaixo.
 
-1. Crie seu ambiente virtual:
+## Usando docker
 
-   ```bash
-   python -m venv venv
-   ```
-
-2. Ative seu ambiente (venv):
+1. No terminal execute o comando:
 
    ```bash
-   # Linux:
-   source venv/bin/activate
+   docker compose up
    ```
+
+2. Abra o Chrome e acesse o endereço:
 
    ```bash
-   # Windows:
-   .\venv\Scripts\activate
-
+   localhost:8000/api/cnab_file/
    ```
 
-3. Instale os pacotes do projeto:
+   Faça uma cópia do arquivo `CNAB.txt` que se encontra no diretório test_dataframe. Ele serve para ser enviado no fomrulário da página acessada. As transações serão listadas na tela.
+
+   Após listagem, caso queira alternar entre telas, acesse o endereço:
 
    ```bash
-   pip install -r requirements.txt
+   localhost:8000/api/cnab_file/
+
+               ou
+
+   localhost:8000/api/cnab_file/transactions/
    ```
 
-4. Rode as migrations:
-
+3. Caso queira remover o banco e/ou o container, execute no terminal:
    ```bash
-   python manage.py migrate
+   docker compose down
    ```
+
+---

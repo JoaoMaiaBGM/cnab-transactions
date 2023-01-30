@@ -1,0 +1,35 @@
+{% extends 'style.html' %} {% block content %}
+<div>
+  <h1>Listagem das transações</h1>
+</div>
+<div class="transaction">
+  <form method="POST" enctype="multipart/form-data" id="file">
+    {% csrf_token %}
+  </form>
+</div>
+<table>
+  <tr>
+    <th>Tipo</th>
+    <th>Data</th>
+    <th>Valor</th>
+    <th>CPF</th>
+    <th>Cartão</th>
+    <th>Hora</th>
+    <th>Dono da loja</th>
+    <th>Nome da loja</th>
+  </tr>
+  {% for transaction in transactions %}
+  <tr>
+    <td>{{ transaction.tipo }}</td>
+    <td>{{ transaction.data }}</td>
+    <td>{{ transaction.valor }}</td>
+    <td>{{ transaction.cpf }}</td>
+    <td>{{ transaction.cartao }}</td>
+    <td>{{ transaction.hora }}</td>
+    <td>{{ transaction.dono_da_loja }}</td>
+    <td>{{ transaction.nome_loja }}</td>
+  </tr>
+  {% endfor %}
+</table>
+
+{% endblock %}
