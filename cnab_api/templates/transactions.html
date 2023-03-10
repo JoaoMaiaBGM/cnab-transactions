@@ -5,6 +5,14 @@
 <div class="transaction">
   <form method="POST" enctype="multipart/form-data" id="file">
     {% csrf_token %}
+    <label for="filterStore">Filtre por loja</label>
+    <select name="store" id="filterStore" onChange="submitStore();">
+      <option value="">--Escolha uma opção--</option>
+      <option value="Todas as lojas">Todas as lojas</option>
+      {% for store in stores %}
+      <option value="{{store.nome_loja}}">{{store.nome_loja}}</option>
+      {% endfor %}
+    </select>
   </form>
 </div>
 <table>
@@ -31,5 +39,21 @@
   </tr>
   {% endfor %}
 </table>
-
+{% if total_sum %}
+<div class="transaction">
+  <table>
+    {% for transaction in transactions %} {% ifchanged %}
+    <tr>
+      <td>{{transaction.nome_loja}}</td>
+      <td>{{total_sum}}</td>
+    </tr>
+    {% endifchanged %} {% endfor %}
+  </table>
+</div>
+{% endif %}
+<script>
+  function submitStore() {
+    document.getElementById("file").submit();
+  }
+</script>
 {% endblock %}

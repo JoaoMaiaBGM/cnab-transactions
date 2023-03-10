@@ -38,7 +38,7 @@ class CnabFileTransactions(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['transactions'], context['total_sum'] = self.filter.filter(self.store)
-        context['store'] = CnabApiModel.objects.all().values('nome_loja')
+        context['stores'] = CnabApiModel.objects.all().values('nome_loja')
         return context
 
     
