@@ -79,17 +79,17 @@ class FileUtils():
             normalized_query = normalized_query + [transaction]
         return normalized_query
 
-    def get_transactions_by_strore_name(self, store_name):
+    def get_transactions_by_store_name(self, store):
         query = self.model.objects.filter(
-            nome_loja=store_name).order_by("nome_loja")
-        query_Total_sum = query.aggregate(Sum("valor"))
-        query_Total_sum = str(round(query_Total_sum["total_sum"], 2))
+            nome_loja=store).order_by("nome_loja")
+        query_total_sum = query.aggregate(Sum("valor"))
+        query_total_sum = str(round(query_total_sum["valor__sum"], 2))
         normalized_query = []
 
         for transaction in query:
             transaction = self.normalizer.query_normalizer(transaction)
             normalized_query = normalized_query + [transaction]
-        return normalized_query, query_Total_sum
+        return normalized_query, query_total_sum
 
     def read_file(self, file):
         file = file.decode('utf-8')
@@ -100,6 +100,6 @@ class FileUtils():
 
     def filter(self, store):
         if store:
-            return self.get_transactions_by_strore_name(store)
+            return self.get_transactions_by_store_name(store)
         else:
             return self.get_transactions(), None
