@@ -1,10 +1,12 @@
 import datetime
 
+from django.db.models import Sum
+
 from cnab_api.models import CnabApiModel
 
 
 class FileNormalizer():
-    
+
     def file_normalizer(self, value):
         if value is not None:
             return {
@@ -14,17 +16,9 @@ class FileNormalizer():
                 'cpf': value[19:30],
                 'cartao': value[30:42],
                 'hora': datetime.time(int(value[42:44]), int(value[44:46]), int(value[46:48])),
-                'dono_da_loja': value[48:62],
-                'nome_loja': value[62:81],
+                'dono_da_loja': value[48:62].strip(),
+                'nome_loja': value[62:81].strip(),
             }
-            
-
-    def transactions_signal(self, type_transactions, value):
-        if type_transactions in [2,3,9]:
-            return value
-        else:
-            return abs(value)
-
 
     def type_transactions(self, type_transaction):
 
@@ -47,9 +41,8 @@ class FileNormalizer():
         elif type_transaction == 9:
             return 'Aluguel'
 
-    
     def query_normalizer(self, query):
-         if query is not None:
+        if query is not None:
             return {
                 'tipo': self.type_transactions(query.tipo),
                 'data': query.data,
@@ -61,17 +54,22 @@ class FileNormalizer():
                 'nome_loja': query.nome_loja,
             }
 
+    def transactions_signal(self, type_transactions, value):
+        if type_transactions in [2, 3, 9]:
+            return value
+        else:
+            return abs(value)
+
+
 class FileUtils():
 
     def __init__(self):
         self.normalizer = FileNormalizer()
         self.model = CnabApiModel
 
-
     def create_transaction(self, normalizer):
         model = self.model(**normalizer)
         model.save()
-
 
     def get_transactions(self):
         query = self.model.objects.all().order_by('nome_loja')
@@ -81,6 +79,16 @@ class FileUtils():
             normalized_query = normalized_query + [transaction]
         return normalized_query
 
+    def get_transactions_by_store_name(self, store):
+        query = self.model.objects.filter(
+            nome_loja=store).order_by("nome_loja")
+        query_total_sum = query.aggregate(Sum("valor"))
+        query_total_sum = str(round(query_total_sum["valor__sum"], 2))
+        normalized_query = []
+        for transaction in query:
+            transaction = self.normalizer.query_normalizer(transaction)
+            normalized_query = normalized_query + [transaction]
+        return normalized_query, query_total_sum
 
     def read_file(self, file):
         file = file.decode('utf-8')
@@ -89,6 +97,8 @@ class FileUtils():
             self.create_transaction(normalizer)
         return file
 
-
     def filter(self, store):
-        return self.get_transactions(), None
+        if store:
+            return self.get_transactions_by_store_name(store)
+        else:
+            return self.get_transactions(), None

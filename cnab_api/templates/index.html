@@ -11,7 +11,7 @@
       <form method="POST" enctype="multipart/form-data" id="file">
         <div >
           {% csrf_token %}
-          <label for="id_file">Selecionar arquivo &#187</label>
+          <label class="chooseFile" for="id_file">Selecionar arquivo &#187</label>
           {{ form }}
         </div>
       </form>
