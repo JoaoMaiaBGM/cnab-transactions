@@ -8,7 +8,7 @@
     <label for="filterStore">Filtre por loja</label>
     <select name="store" id="filterStore" onChange="submitStore();">
       <option value="">--Escolha uma opção--</option>
-      <option value="Todas as lojas">Todas as lojas</option>
+      <option value="">Todas as lojas</option>
       {% for store in stores %}
       <option value="{{store.nome_loja}}">{{store.nome_loja}}</option>
       {% endfor %}

@@ -16,15 +16,9 @@ class FileNormalizer():
                 'cpf': value[19:30],
                 'cartao': value[30:42],
                 'hora': datetime.time(int(value[42:44]), int(value[44:46]), int(value[46:48])),
-                'dono_da_loja': value[48:62],
-                'nome_loja': value[62:81],
+                'dono_da_loja': value[48:62].strip(),
+                'nome_loja': value[62:81].strip(),
             }
-
-    def transactions_signal(self, type_transactions, value):
-        if type_transactions in [2, 3, 9]:
-            return value
-        else:
-            return abs(value)
 
     def type_transactions(self, type_transaction):
 
@@ -60,6 +54,12 @@ class FileNormalizer():
                 'nome_loja': query.nome_loja,
             }
 
+    def transactions_signal(self, type_transactions, value):
+        if type_transactions in [2, 3, 9]:
+            return value
+        else:
+            return abs(value)
+
 
 class FileUtils():
 
@@ -85,7 +85,6 @@ class FileUtils():
         query_total_sum = query.aggregate(Sum("valor"))
         query_total_sum = str(round(query_total_sum["valor__sum"], 2))
         normalized_query = []
-
         for transaction in query:
             transaction = self.normalizer.query_normalizer(transaction)
             normalized_query = normalized_query + [transaction]

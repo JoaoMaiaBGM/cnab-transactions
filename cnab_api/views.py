@@ -57,9 +57,6 @@ class CnabFileTransactions(FormView):
             'nome_loja').distinct()
         return context
 
-    def form_valid(self, form):
-        return super().form_valid(form)
-
 
 class CnabFileTransactionsDetail(CnabFileTransactions):
     def post(self, request: HttpRequest, *args: str, **kwargs) -> HttpResponse:
