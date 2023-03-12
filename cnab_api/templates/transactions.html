@@ -5,7 +5,7 @@
 <div class="transaction">
   <form method="POST" enctype="multipart/form-data" id="file">
     {% csrf_token %}
-    <label for="filterStore">Filtre por loja</label>
+    <label class="filterStore" for="filterStore">Filtre por loja</label>
     <select name="store" id="filterStore" onChange="submitStore();">
       <option value="">--Escolha uma opção--</option>
       <option value="">Todas as lojas</option>
